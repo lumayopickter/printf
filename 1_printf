@@ -1,0 +1,70 @@
+#include <stdarg.h>
+#include <stdio.h>
+
+/**
+ * _putchar - Writes a character to stdout
+ * @c: The character to write
+ *
+ * Return: On success, returns the character written.
+ * On error, returns EOF.
+ */
+int _putchar(char c)
+{
+	return putchar(c);
+}
+
+/**
+ * _printf - Produces output according to a format
+ * @format: The format string
+ *
+ * Return: The number of characters printed (excluding the null byte)
+ */
+int _printf(const char *format, ...)
+{
+	va_list args;
+	int count = 0;
+	char c;
+	const char *str;
+
+	va_start(args, format);
+
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++; /* Move past '%' */
+			switch (*format)
+			{
+				case 'c':
+					c = va_arg(args, int);
+					count += _putchar(c);
+					break;
+				case 's':
+					str = va_arg(args, const char *);
+					while (*str)
+					{
+						count += _putchar(*str);
+						str++;
+					}
+					break;
+				case '%':
+					count += _putchar('%');
+					break;
+				default:
+					count += _putchar('%');
+					count += _putchar(*format);
+					break;
+			}
+		}
+		else
+		{
+			count += _putchar(*format);
+		}
+		format++;
+	}
+
+	va_end(args);
+
+	return count;
+}
+
