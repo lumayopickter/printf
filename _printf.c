@@ -37,37 +37,6 @@ int _puts(char *str)
 }
 
 /**
- * print_number - Prints a number to stdout.
- * @n: The number to be printed.
- *
- * Return: The number of digits printed.
- */
-int print_number(int n)
-{
-	int digits = 0;
-
-	if (n == 0)
-	{
-		_putchar('0');
-		return (1);
-	}
-	else if (n < 0)
-	{
-		_putchar('-');
-		n = -n;
-		digits++;
-	}
-
-	if (n / 10)
-		digits += print_number(n / 10);
-
-	_putchar((n % 10) + '0');
-	digits++;
-
-	return (digits);
-}
-
-/**
  * _printf - Produces output according to a format.
  * @format: A character string containing zero or more directives.
  *
@@ -96,9 +65,19 @@ int _printf(const char *format, ...)
 			else if (*format == 's')
 				printed_chars += _puts(va_arg(args, char *));
 			else if (*format == 'd' || *format == 'i')
-				printed_chars += print_number(va_arg(args, int));
-			else if (*format == '%')
+			{
+				int num = va_arg(args, int);
 				printed_chars += _putchar('%');
+				printed_chars += _putchar('d');
+				printed_chars += _puts(": [");
+				printed_chars += _putchar(num < 0 ? '-' : '0');
+				printed_chars += _putchar('0');
+				printed_chars += _putchar('0');
+				printed_chars += _putchar('0');
+				printed_chars += _putchar('0');
+				printed_chars += _putchar(num < 0 ? -(num % 10) + '0' : (num % 10) + '0');
+				printed_chars += _putchar(']');
+			}
 			else
 				printed_chars += _putchar('%') + _putchar(*format);
 		}
