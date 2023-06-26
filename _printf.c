@@ -37,35 +37,6 @@ int _puts(char *str)
 }
 
 /**
- * _print_int - Prints an integer to stdout.
- * @num: The integer to be printed.
- *
- * Return: The number of characters printed.
- */
-int _print_int(int num)
-{
-	int count = 0;
-
-	/* Handle negative numbers */
-	if (num < 0)
-	{
-		_putchar('-');
-		num = -num;
-		count++;
-	}
-
-	/* Recursively print digits */
-	if (num / 10)
-		count += _print_int(num / 10);
-
-	/* Print the last digit */
-	_putchar(num % 10 + '0');
-	count++;
-
-	return (count);
-}
-
-/**
  * _printf - Produces output according to a format.
  * @format: A character string containing zero or more directives.
  *
@@ -96,12 +67,20 @@ int _printf(const char *format, ...)
 			else if (*format == 'd' || *format == 'i')
 			{
 				int num = va_arg(args, int);
-				printed_chars += _print_int(num);
+				printed_chars += _putchar('-');
+
+				if (num < 0)
+				{
+					num *= -1;
+					printed_chars += _putchar('-');
+				}
+
+				printed_chars += _print_number(num);
 			}
 			else if (*format == '%')
 				printed_chars += _putchar('%');
 			else
-				printed_chars += (_putchar('%') + _putchar(*format));
+				printed_chars += _putchar('%') + _putchar(*format);
 		}
 		else
 			printed_chars += _putchar(*format);
@@ -112,5 +91,31 @@ int _printf(const char *format, ...)
 	va_end(args);
 
 	return (printed_chars);
+}
+
+/**
+ * _print_number - Prints a number.
+ * @n: The number to be printed.
+ *
+ * Return: The number of characters printed.
+ */
+int _print_number(int n)
+{
+	int digits = 0;
+
+	if (n == 0)
+		return (_putchar('0'));
+
+	if (n / 10)
+		digits += _print_number(n / 10);
+
+	if (n < 0)
+		_putchar((n % 10) * -1 + '0');
+	else
+		_putchar(n % 10 + '0');
+
+	digits++;
+
+	return (digits);
 }
 
