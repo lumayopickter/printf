@@ -37,6 +37,33 @@ int _puts(char *str)
 }
 
 /**
+ * _print_number - Prints a number to stdout.
+ * @n: The number to be printed.
+ *
+ * Return: The number of digits printed.
+ */
+int _print_number(int n)
+{
+	int count = 0;
+
+	if (n == 0)
+		return (_putchar('0'));
+
+	if (n < 0)
+	{
+		count += _putchar('-');
+		n = -n;
+	}
+
+	if (n / 10)
+		count += _print_number(n / 10);
+
+	count += _putchar('0' + (n % 10));
+
+	return (count);
+}
+
+/**
  * _printf - Produces output according to a format.
  * @format: A character string containing zero or more directives.
  *
@@ -64,6 +91,8 @@ int _printf(const char *format, ...)
 				printed_chars += _putchar(va_arg(args, int));
 			else if (*format == 's')
 				printed_chars += _puts(va_arg(args, char *));
+			else if (*format == 'd' || *format == 'i')
+				printed_chars += _print_number(va_arg(args, int));
 			else if (*format == '%')
 				printed_chars += _putchar('%');
 			else
